@@ -1,0 +1,133 @@
+###  add_layer  ###
+1 np.newaxis的功能是插入新维度
+    http://blog.csdn.net/mameng1/article/details/54599306
+2 x.shape 矩阵的维度
+    x_data = np.linspace(-1,1,300, dtype=np.float32)[:, np.newaxis]
+    noise = np.random.normal(0, 0.05, x_data.shape).astype(np.float32)
+    #使用linspace生成【-1，1】之间的300个点，使用[:, np.newaxis] 将数组变成列矩阵
+    #生成noise【0，0.05】大小的随机噪声，数量与矩阵维度大小相同
+
+3 x = tf.placeholder(tf.float32, [None, 784])  代表占位符
+    可以输入任意数量的MNIST图像，None表示矩阵的第一维可以任意长度
+
+4 biases 相当于一个列表，推荐不为0 ，每一步都会变化
+
+5 tf.train.GradientDescentOptimizer(0.1).minimize(loss) 
+    梯度下降优化法 使loss的误差为0.1
+    tensorflow 会自动的使用 BP反向传播算法Backpropagation
+
+
+6 W = tf.Variable(tf.zeros([784,10])) 一个Variable代表一个可修改的张量
+
+8 成本 或 损耗 用于评估模型好坏
+    cost(成本):交叉熵 cross_entropy
+
+9 评估模型性能
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    运行并打印 tf.cast 格式转换
+    print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+
+
+###  对 add_layer 可视化处理  ###
+使用matploitlib.pylot 对数据进行可视化处理
+
+fig = plt.figure() 
+ax = fig.add_subplot(1,1,1)    #第几个子图
+ax.scatter(x_data,y_data)      #坐标上的数据
+plt.ion()# w使 plt.show() 不暂停，继续show
+plt.show()
+
+#  制作动画  #
+for 循环
+    try:
+    except Exception:
+
+###  加速神经网络  ###
+    1 Stochastic Grandient Descent
+             原始更新  W += -Learning rate * dx  负的学习率与校正值的乘积
+    2 monentum:       W += m; m = b1*m - Learning rate * dx  有惯性，比2更平滑了
+    3 AdaGrad:        v += dx^2; W += -Learning rate * dx/sqrt(v)
+    4 RMSProp：       monentum 与 adagrad 的结合体
+    5 Adam:           RMSProp 方法改进
+
+
+###  优化器  ###
+常用 
+class tf.train.MonentumOptimizer 与上一步Learning rate 有关，所以更好
+class tf.train.AdamOptimizer 
+
+
+###  TensorBoard 可视化帮手 ###
+1 with tf.name_scope('layer'):
+    .....
+2 # 启动
+sess = tf.Session()
+writer = tf.summary.Filewriter("logs/", sess.graph)
+3 # 初始化
+init = tf.global_Variable_initializer()
+sess.run(init)
+4 tf.scalar_summary 标量数据图表
+  tf.histogram_summary  梯度或权重分布
+  np.linspace(start,stop,num,endpoint,retstep,dtype)  在间隔范围生成数据
+  tf.merge_all_summaries()将所有的summaries合并到一起
+
+
+###  过拟合 dropout解决方法 ##
+    不能反应数据的趋势
+1 sklearning 
+    算法：分类，回归，聚类，降维
+    分类和回归：监督式学习
+    聚类：非监督式学习
+
+
+###  CNN 卷积神经网络  ###
+# 主要：卷积层，池化层，全链接层
+# 网络层构成如下：
+# image
+# convolution
+# max pooling
+# convolution
+# max pooling
+# fully connected
+# fully connected
+# classifier
+
+1 keep_prob = 1, 神经元被选中的概率为1
+2 tf.equal(A,B) 对比两个矩阵的元素，并返回矩阵，元素相等，返回元素true
+3 tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, name=None)
+    https://www.cnblogs.com/qggg/p/6832342.html详解
+4 tf.nn.max_pool(value, ksize, strides, padding, name=None)
+    https://www.cnblogs.com/smartwhite/p/7819689.html
+5 tf.truncated_normal(shape, mean, stddev) 
+    shape表示生成张量的维度，mean是均值，stddev是标准差
+6 tf.reshape(tensor, shape, name=None) 
+    函数的作用是将tensor变换为参数shape的形式。 
+
+
+###  RNN LSTM  ###
+np.arange()  支持步长为小数
+有三个参数，以第一个参数为起点，第三个参数为步长，
+第2个参数为终点
+截止到第二个参数之前的不包括第二个参数的数据序列 
+
+def __init__():
+    self.input_size = input_size
+self用在 __init__() 内
+
+tf.variable_scope 共享变量
+
+tf.train.AdamOptimizer(learning_rate=lr).minimize(cost) 自适应算法
+
+losses = tf.contrib.legacy_seq2seq.sequence_loss_by_example() 用于计算损失
+
+tf.reduce_sum()  对矩阵沿一维度求和
+###
+python 使用
+###
+1 with 后面为一个表达式，表达式返回的是一个下方管理器对象
+    使用as可以将
+
+
+
+
+
